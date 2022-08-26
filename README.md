@@ -1,4 +1,4 @@
-# Interactive-Graphics
+# Interactive Graphics
 ## 2021-homework1
 In homework1 1 I obtained the following effects: 
 
