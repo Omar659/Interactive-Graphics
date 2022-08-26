@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Raccoons Rush</title>
+        <link rel="shortcut icon" href="#">
+        <style>
+            html, body{
+                margin: 0;  
+                height: 100%;
+                background-image: url('./resources/textures/oldPaperBackground.png');
+                background-repeat: no-repeat;
+                background-size:cover;
+                font-family: Copperplate, Papyrus, fantasy;
+            }
+
+            #td1{
+                text-align: right;
+            }
+
+            #td2{
+                text-align: left;
+            }
+
+            #button1{
+                display:inline-block;
+                padding:0.35em 1.2em;
+                border:0.1em solid rgb(87, 85, 85);
+                margin:0 0.3em 0.3em 0;
+                border-radius:0.12em;
+                height: auto;
+                width: 250px;
+                text-decoration:none;
+                font-family: Copperplate, Papyrus, fantasy;
+                font-weight:300;
+                font-size: 25px;
+                color:rgb(87, 85, 85);
+                background-color: #ffffff00;
+                text-align:center;
+                transition: all 0.2s;
+            }
+            #button1:hover{
+                color:#000000;
+                background-color:#e4e4e4;
+            }
+           
+        </style>
+	</head>
+    <body>        
+        <script>
+            function play(difficulty) {
+                var checkBox = document.getElementById("shadow").checked
+                localStorage.setItem("shadow", checkBox);
+                window.location.href = "./" + difficulty + "/" + difficulty +".html";
+            }
+        </script>
+        <div align='center' valign='top' style='color:rgb(0, 0, 0);font-size:55px; font-weight: bold;'>Raccons Rush</div>
+        <div align='center' valign='top' style='color:rgb(87, 85, 85);font-size:25px; '>Welcome to Raccons Rush game</div>
+        <div align='center' valign='top' style='color:rgb(87, 85, 85);font-size:25px; '>You will impersonate Steve a young raccoon who wants to become the fastest raccoon in the world.</div> 
+        <div align='center' valign='top' style='color:rgb(87, 85, 85);font-size:25px; '>Today he will be able to fulfill his dream. He will be competing with the greatest raccoon racers from around the world.</div>
+        <div align='center' valign='top' style='color:rgb(87, 85, 85);font-size:25px; '>All animals from all eras and all parts of the world have gathered today to witness this great event.</div>
+        <div align='center' valign='top' style='color:rgb(87, 85, 85);font-size:25px; '>Will Steve be able to make his dream come true?</div>
+
+        <div align='center' valign='top' style='color:rgb(0, 0, 0);font-size:45px; '>Instructions:
+            <div align='center' valign='top' style='color:rgb(87, 85, 85);font-size:25px; '>Press the <b>A</b> and <b>D</b> keys alternately to make Steve run, the faster you are the faster Steve will be too.<br> Be careful though! If you don't click the keys alternately Steve will slow down. </div>
+            <div align='center' valign='top' style='color:rgb(87, 85, 85);font-size:25px; '>During the race, five balloons will appear and, if you are fast enough to click them with the mouse, Steve will get a speed bonus</div>
+        </div>
+        
+        <div align='center' valign='top' style='color:rgb(0, 0, 0);font-size:45px;'>Choose difficulty:</div>
+        <div align='center'>
+            <input type="checkbox" id="shadow" name="shadow" >
+            <label for="shadow" style='color:rgb(87, 85, 85);font-size:25px;'>Enable shadows. A high performance computer is required to play the game smoothly with this option.</label>
+        </div>
+        
+        <table align='center'>
+            <tr>
+                <td id = 'td1'>
+                    <button id = "button1" onclick="play('easy')">Easy</button>
+                </td>
+
+                <td id = 'td2'>
+                    <div align='left' style='color:rgb(87, 85, 85);font-size:25px;'>
+                        Other raccoons are much slower than your maximum speed
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td id = 'td1'>
+                    <button id = "button1" onclick="play('medium')">Medium</button>
+                </td>
+
+                <td id = 'td2'>
+                    <div align='left' style='color:rgb(87, 85, 85);font-size:25px; '>
+                        Other raccoons might be a bit faster than your maximum speed. You will have to pop balloons to win! <br> Also, it will be more difficult to reach the maximum speed
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td id = 'td1'>
+                    <button id = "button1" onclick="play('hard')">Hard</button>
+                </td>
+
+                <td id = 'td2'>
+                    <div align='left' style='color:rgb(87, 85, 85);font-size:25px; '>
+                        Other raccoons will be faster than your maximum speed.<br> The race will take place at night and balloons will give a lower boost. <br> It will be more difficult to click on balloons.
+                    </div>
+                    <div align='left' style='color:rgb(87, 85, 85);font-size:15px; '> *Due to the presence of several point lights the game in this mode could be slower on low-performance PCs.</div>
+                </td>
+            </tr>
+        </table>
+        <audio src="./resources/audios/soundtracks/menu.mp3" autoplay id = "myAudio"></audio>
+        <script>
+            var audio = document.getElementById("myAudio");
+            audio.volume = 0.2;
+        </script>
+	</body>   
+</html>

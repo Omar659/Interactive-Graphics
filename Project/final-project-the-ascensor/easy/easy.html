@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Raccoons Rush</title>
+        <link rel="shortcut icon" href="#">
+		<style>
+			html, body {  
+				margin: 0;  height: 100%;
+			}
+
+			.loader { 
+				position: fixed;
+				left: 0px; 
+				top: 0px;
+				width: 100%;
+				height: 100%;
+				background: url('./../resources/images/raccoonLoading.gif'); 
+				background-color: rgb(254,68,0);
+				background-position: center;
+				background-repeat: no-repeat; 
+				background-size: 960px 720px;
+				margin: auto;
+			}
+
+			#hud {
+				position: absolute; 
+				top: 0;
+				width: 100%;
+				height: 100%;
+				margin: auto;
+				z-index: 3;
+				display: none;
+			}
+
+			#hud.visible {
+				display: block;
+			}
+			 
+			#A, #D{ 
+				position: absolute;
+				border: 3px solid #FFF;
+				border-radius: 5px;
+				color: #FFF;
+				font-family: Copperplate, Papyrus, fantasy;
+			}
+			
+
+			#A {  
+				bottom: 10px;
+				left: 10px;
+				width: 80pt; 
+				text-align: center; 
+				background: #AA3333;
+				font-size: 50pt;
+				font-weight: bold;
+				padding: 5px;
+			}
+			
+			#D {  
+				bottom: 10px;
+				left: 140px; 
+				width: 80pt;  
+				text-align: center;
+				background: #3333AA;
+				font-size: 50pt;
+				font-weight: bold; 
+				padding: 5px;
+			}
+			
+			#countdown{
+
+				font-family: Copperplate, Papyrus, fantasy;
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				-webkit-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+				font-weight: bold;
+				text-shadow: 2px 2px #000000;
+				color: rgb(238, 231, 231);
+			}
+			
+			#button1{
+                display:inline-block;
+                padding:0.35em 1.2em;
+                border:0.1em solid #000000;
+                margin:0 0.3em 0.3em 0;
+                border-radius:0.12em;
+                height: auto;
+                width: 250px;
+                text-decoration:none;
+                font-family: Copperplate, Papyrus, fantasy;
+                font-weight:300;
+                font-size: 40px;
+                color:#000000;
+                background-color: #ffffff00;
+                text-align:center;
+                transition: all 0.2s;
+            }
+
+            #button1:hover{
+                color:#000000;
+                background-color:#e4e4e4;
+            }
+
+			#button2{
+                display:inline-block;
+				position: relative;
+                padding:0.35em 1.2em;
+                border:0.1em solid #ffffff;
+                margin:0 0.3em 0.3em 0;
+                border-radius:0.12em;
+                height: auto;
+                width: 350px;
+                text-decoration:none;
+                font-family: Copperplate, Papyrus, fantasy;
+                font-weight:300;
+                font-size: 40px;
+                color:#ffffff;
+                background-color: #ffffff00;
+                text-align:center;
+                transition: all 0.2s;
+				text-shadow: 2px 2px #000000;
+            }
+
+            #button2:hover{
+                color:#000000;
+                background-color:#ffffff83;
+				text-shadow: 2px 2px #ffffff;
+            }
+
+			.meter {
+				box-sizing: content-box;
+				height: 50px;
+				position: relative;
+				margin: 20px 0 20px 0;
+				background: rgba(85, 85, 85, 0.65);
+				border-radius: 25px;
+				padding: 15px;
+				box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+			}
+			.meter > span {
+				display: block;
+				height: 100%;
+				border-top-right-radius: 8px;
+				border-bottom-right-radius: 8px;
+				border-top-left-radius: 8px;
+				border-bottom-left-radius: 8px;
+				background-color: rgba(248, 211, 1, 0.65);
+				background-image: linear-gradient(
+					center bottom,
+					rgb(43, 194, 83) 37%,
+					rgb(84, 240, 84) 69%
+				);
+				box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
+					inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+				position: relative;
+				overflow: hidden;
+			}
+			.meter > span:after,
+			.animate > span > span {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				background-image: linear-gradient(
+					-45deg,
+					rgba(255, 255, 255, 0.2) 25%,
+					transparent 25%,
+					transparent 50%,
+					rgba(255, 255, 255, 0.2) 50%,
+					rgba(255, 255, 255, 0.2) 75%,
+					transparent 75%,
+					transparent
+				);
+				z-index: 1;
+				background-size: 50px 50px;
+				animation: move 2s linear infinite;
+				border-top-right-radius: 8px;
+				border-bottom-right-radius: 8px;
+				border-top-left-radius: 20px;
+				border-bottom-left-radius: 20px;
+				overflow: hidden;
+			}
+			.animate > span:after {
+				display: none;
+			}
+
+			@keyframes move {
+				0% {
+					background-position: 0 0;
+				}
+				100% {
+					background-position: 50px 50px;
+				}
+			}
+
+			#td1{
+                text-align: center;
+            }
+
+            #td2{
+                text-align: center;
+				vertical-align: middle;
+				font-family: Copperplate, Papyrus, fantasy;
+				font-size: 70px;
+				font-weight: bold;
+				text-shadow: 2px 2px #000000;
+				color: rgb(238, 231, 231);
+            }
+
+			#td3{
+                text-align: center;
+				vertical-align: middle;
+				font-family: Copperplate, Papyrus, fantasy;
+				font-size: 70px;
+				font-weight: bold;
+				text-shadow: 2px 2px #000000;
+				color: rgb(238, 231, 231);
+            }
+
+			.unselectable {
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+
+			.overlay {
+				position: absolute;
+				top: 0;
+				left: 0;
+				background-color: rgba(68,68,68,0.65);
+  				width: 100%;
+  				height: 100%;
+			}
+
+			.endScoreFont{
+				font-size: 50px;
+				font-family: Copperplate, Papyrus, fantasy;
+				color: #FFF;
+				font-weight: bold;
+				text-shadow: 2px 2px #000000;
+			}
+
+			.visible{
+				visibility: visible;
+			}
+
+		</style>
+	</head>
+	<body>
+        <div id = "container">
+            <div id = "orbitDiv" class="parent" style="position:relative">
+				<div class = "loader">
+					<div id = "clickText" align = "center" style = "padding: 20px; font-size: 50px; font-family: Copperplate, Papyrus, fantasy;">
+						<b>Loading...</b>
+						<p align = "center" style = "font-size: 20px; font-family: Copperplate, Papyrus, fantasy;">
+							*It may take a while depending on your connection and computer specifications, don't worry!
+						</p>
+					</div>
+				</div>
+            </div>
+        </div>
+		<script type="module" src="./codeEasy.js"></script>
+	</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+
+<body>
+    <canvas id="gl-canvas" width="650"" height="650 ">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+</body>
+
+<div>
+    <button id = "animationButton">Start animation</button>
+    <div id = "animation">
+        Waiting
+    </div>
+</div>
+
+<br>
+
+<div>
+    Speed - FPS 60<input id="fpsSlider" type="range"
+        min="60" max="144" step="1" value="90" />
+        144
+    <div id = "fps">
+        Speed - FPS = 90 N.B. If you are using firefox, the frame rate is lower and therefore also the speed
+    </div>
+</div>
+<br>
+<div>
+    theta -180<input id="thetaSlider" type="range"
+        min="-180" max="180" step="5" value="0" />
+        180
+    <div id = "theta">
+        theta = 0
+    </div>
+</div>
+<div>
+    phi -90<input id="phiSlider" type="range"
+        min="-90" max="90" step="5" value="0" />
+        90
+    <div id = "phi">
+        phi = 0
+    </div>
+</div>
+<div>
+    fov 10<input id="fovSlider" type="range"
+        min="10" max="120" step="5" value="45" />
+        120
+    <div id = "fov">
+        fov = 45
+    </div>
+</div>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+precision mediump float;
+
+in vec4 aPosition;
+in vec3 aNormal;
+in vec3 aObjTangent;
+in vec2 aTexCoord;
+
+out vec4 vColor;
+out vec2 vTexCoord;
+out vec3 vLB;
+out vec3 vE;
+out vec3 vN;
+out vec3 vL;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform vec4 uAmbientProduct, uDiffuseProduct, uSpecularProduct;
+uniform float uShininess;
+uniform vec4 uLightPosition;
+uniform mat3 uNormalMatrix;
+
+void main()
+{
+    // compute vector H for the specular component in fragment shader 
+    vec3 pos = -(modelViewMatrix * aPosition).xyz;
+    vec3 L;
+    if(uLightPosition.w == 0.0) L = normalize(uLightPosition.xyz);
+    else L = normalize( uLightPosition.xyz - pos );
+    vec3 E = normalize(-pos);
+    vec4 NN = vec4(aNormal,0);
+    vec3 N = normalize((modelViewMatrix*NN).xyz);
+    vL = L;
+    vE = E;
+    vN = N;
+
+    // position of vertex
+    gl_Position = projectionMatrix * modelViewMatrix * aPosition;
+    
+    // pass texture coordinates
+    vTexCoord = aTexCoord;
+
+    // position and light in eye coordinates
+    vec3 eyePosition = (modelViewMatrix*aPosition).xyz;
+    vec3 eyeLightPos = (uLightPosition).xyz;
+
+    // normal, tangent and binormal in eye coordinates
+    vec3 NB = normalize(uNormalMatrix*aNormal);
+    vec3 TB  = normalize(uNormalMatrix*aObjTangent);
+    vec3 BB = cross(NB, TB);
+
+    // light vector in texture space
+    vLB.x = dot(TB, eyeLightPos-eyePosition);
+    vLB.y = dot(BB, eyeLightPos-eyePosition);
+    vLB.z = dot(NB, eyeLightPos-eyePosition);
+
+    //normalize LB vector
+    vLB = normalize(vLB);
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+#version 300 es
+
+precision mediump float;
+
+in vec4 vColor;
+in vec2 vTexCoord;
+in vec3 vLB;
+in vec3 vE;
+in vec3 vL;
+in vec3 vN;
+
+out vec4 fColor;
+
+uniform sampler2D uTextureMap;
+uniform vec4 uSpecularProduct, uDiffuseProduct, uAmbientProduct;
+uniform float uShininess;
+uniform float uFace;
+
+void main()
+{   
+    // compute H vector and the texture N
+    vec3 H = normalize( vL + vE );
+    vec4 N = texture(uTextureMap, vTexCoord);
+
+    // initialize NN and LL to avoid errors
+    vec3 NN = vec3(0.0, 0.0, 0.0);
+    vec3 LL = vec3(0.0, 0.0, 0.0);
+    
+    if (uFace == 1.0) {
+        // if face: 
+            // NN = normals
+            // LL = light position
+        NN = vN;
+        LL = vL;
+    } else {
+        // if not face:
+            // NN = normals in normalmap
+            // LL = light position in texture TBN coordinates
+        NN =  normalize(2.0*N.xyz-1.0);
+        LL = normalize(vLB);
+    }
+
+    // ambient component
+    vec4 ambient = uAmbientProduct;
+
+    // diffuse component
+    float Kd = max(dot(NN, LL), 0.0);
+    vec4 diffuse = Kd*uDiffuseProduct;
+
+    // specular component
+    float Ks = pow( max(dot(NN, H), 0.0), uShininess );
+    vec4 specular = Ks * uSpecularProduct;
+    if( dot(NN, LL) < 0.0 ) specular = vec4(0.0, 0.0, 0.0, 1.0);
+    
+    // if I render a face multiplicate the texture
+    if (uFace == 1.0) {
+        fColor = N*(ambient + specular + diffuse)*1.2; // *1.2 to better visualize
+        fColor.a = 1.0;
+    }
+    // otherwise render the bumpmap
+    else fColor = ambient + specular + diffuse;
+}
+</script>
+
+<script type="text/javascript" src="../Common/InitShaders.js"></script>
+<script type="text/javascript" src="../Common/MVnew.js"></script>
+<script type="text/javascript" src="Homework2.js"></script>
+</html>

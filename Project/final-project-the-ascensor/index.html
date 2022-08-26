@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Raccoons Rush</title>
+        <link rel="shortcut icon" href="#">
+        <style>
+            html, body{
+                margin: 0;  
+                height: 100%;
+                background-image: url('./resources/textures/oldPaperBackground.png');
+                background-repeat: no-repeat;
+                background-size:cover;
+                font-family: Copperplate, Papyrus, fantasy;
+            }
+
+            p{            
+                position: fixed;
+                font-size: 20px;
+                color:rgb(87, 85, 85);
+                top: 50%;
+                left: 50%;
+                -webkit-transform: translate(-50%, 100%);
+                transform: translate(-50%, 100%);
+            }
+
+            #button1{
+                display:inline-block;
+                position: fixed;
+				top: 50%;
+				left: 50%;
+				-webkit-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+                padding:0.35em 1.2em;
+                border:0.1em solid rgb(87, 85, 85);
+                margin:0 0.3em 0.3em 0;
+                border-radius:0.12em;
+                height: auto;
+                width: auto;
+                text-decoration:none;
+                font-family: Copperplate, Papyrus, fantasy;
+                font-weight:300;
+                font-size: 30px;
+                color:rgb(87, 85, 85);
+                background-color: #ffffff00;
+                text-align:center;
+                transition: all 0.2s;
+            }
+
+            #button1:hover{
+                color:#000000;
+                background-color:#e4e4e4;
+            }
+           
+        </style>
+	</head>
+    <body>
+        <button id = "button1" onclick="location.href='./menu.html'">Click to enter the menu</button>
+        <p>*For a better gaming experience, enable hardware acceleration from your browser.</p>
+	</body>   
+</html>
