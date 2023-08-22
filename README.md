@@ -1,4 +1,7 @@
 # Interactive Graphics
+
+Interactive Graphics course at "La Sapienza University of Rome"
+
 ## 2021-homework1
 In homework1 1 I obtained the following effects: 
 
